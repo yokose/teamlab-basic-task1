@@ -1,0 +1,54 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Simple Inventory API",
+    "description" : "This is a simple API",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/yokose/RESTfulAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "http://localhost:8080/",
+    "description" : "API サーバー"
+  } ],
+  "paths" : {
+    "/search" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "検索"
+          }
+        }
+      }
+    },
+    "/registration" : {
+      "post" : {
+        "responses" : {
+          "200" : {
+            "description" : "登録"
+          }
+        }
+      }
+    },
+    "/change" : {
+      "put" : {
+        "responses" : {
+          "200" : {
+            "description" : "変更"
+          }
+        }
+      }
+    },
+    "/delete" : {
+      "delete" : {
+        "responses" : {
+          "200" : {
+            "description" : "削除"
+          }
+        }
+      }
+    }
+  },
+  "components" : { }
+}

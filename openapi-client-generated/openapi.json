@@ -13,34 +13,52 @@
     "description" : "API サーバー"
   } ],
   "paths" : {
-    "/search" : {
+    "/picture" : {
       "get" : {
+        "description" : "pictureを検索",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "画像のid",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
         "responses" : {
           "200" : {
-            "description" : "検索"
+            "description" : "画像情報を返却"
           }
         }
-      }
-    },
-    "/registration" : {
-      "post" : {
-        "responses" : {
-          "200" : {
-            "description" : "登録"
-          }
-        }
-      }
-    },
-    "/change" : {
+      },
       "put" : {
         "responses" : {
           "200" : {
             "description" : "変更"
           }
         }
-      }
-    },
-    "/delete" : {
+      },
+      "post" : {
+        "description" : "pictureの登録",
+        "parameters" : [ {
+          "name" : "picture",
+          "in" : "query",
+          "description" : "画像データ",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "返り値なし"
+          }
+        }
+      },
       "delete" : {
         "responses" : {
           "200" : {

@@ -16,54 +16,62 @@
     "name" : "picture",
     "description" : "画像"
   }, {
-    "name" : "title",
-    "description" : "タイトル"
-  }, {
-    "name" : "description",
-    "description" : "説明文"
-  }, {
-    "name" : "price",
-    "description" : "価格"
-  }, {
     "name" : "entry",
     "description" : "登録"
+  }, {
+    "name" : "get",
+    "description" : "所得"
+  }, {
+    "name" : "edit",
+    "description" : "編集"
+  }, {
+    "name" : "delete",
+    "description" : "削除"
   } ],
   "paths" : {
+    "/get" : {
+      "get" : {
+        "tags" : [ "get" ],
+        "description" : "商品情報を全て取得",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "データのid",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "所得",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/passingSet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/entry" : {
       "post" : {
         "tags" : [ "entry" ],
-        "description" : "タイトル、説明文、価格をまとめて登録",
-        "parameters" : [ {
-          "name" : "title",
-          "in" : "query",
-          "description" : "商品タイトル",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/title"
+        "description" : "タイトル、説明文、価格を登録",
+        "requestBody" : {
+          "description" : "タイトル、説明文、価格",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passingSet"
+              }
+            }
           }
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "description" : "説明文",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/description"
-          }
-        }, {
-          "name" : "price",
-          "in" : "query",
-          "description" : "価格",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/price"
-          }
-        } ],
+        },
         "responses" : {
           "200" : {
             "description" : "登録"
@@ -71,19 +79,73 @@
         }
       }
     },
+    "/edit" : {
+      "put" : {
+        "tags" : [ "edit" ],
+        "description" : "タイトル、説明文、価格を編集",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "変更したいデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "タイトル、説明文、価格",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passingSet"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "編集"
+          }
+        }
+      }
+    },
+    "/delete" : {
+      "delete" : {
+        "tags" : [ "delete" ],
+        "description" : "データベースから商品データを削除",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "削除したいデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "削除"
+          }
+        }
+      }
+    },
     "/picture" : {
       "get" : {
         "tags" : [ "picture" ],
-        "description" : "タイトルから画像を検索",
+        "description" : "idから画像を検索",
         "parameters" : [ {
-          "name" : "title",
+          "name" : "id",
           "in" : "query",
-          "description" : "画像のタイトル",
+          "description" : "画像のid",
           "required" : true,
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "$ref" : "#/components/schemas/data/properties/title"
+            "$ref" : "#/components/schemas/id"
           }
         } ],
         "responses" : {
@@ -92,7 +154,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/data/properties/picture"
+                  "$ref" : "#/components/schemas/picture"
                 }
               }
             }
@@ -110,19 +172,19 @@
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        }, {
-          "name" : "picture",
-          "in" : "query",
-          "description" : "画像データ",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/picture"
+            "$ref" : "#/components/schemas/id"
           }
         } ],
+        "requestBody" : {
+          "description" : "画像データ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/picture"
+              }
+            }
+          }
+        },
         "responses" : {
           "200" : {
             "description" : "変更"
@@ -131,28 +193,28 @@
       },
       "post" : {
         "tags" : [ "picture" ],
-        "description" : "タイトルで結びつけて画像の登録",
+        "description" : "idで結びつけて画像の登録",
         "parameters" : [ {
-          "name" : "picture",
+          "name" : "id",
           "in" : "query",
-          "description" : "画像データ",
+          "description" : "登録したいデータのid",
           "required" : false,
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "$ref" : "#/components/schemas/data/properties/picture"
-          }
-        }, {
-          "name" : "title",
-          "in" : "query",
-          "description" : "登録したいデータのタイトル",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/title"
+            "$ref" : "#/components/schemas/id"
           }
         } ],
+        "requestBody" : {
+          "description" : "画像データ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/picture"
+              }
+            }
+          }
+        },
         "responses" : {
           "200" : {
             "description" : "登録"
@@ -170,244 +232,7 @@
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "削除"
-          }
-        }
-      }
-    },
-    "/title" : {
-      "get" : {
-        "tags" : [ "title" ],
-        "description" : "タイトルを検索",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "タイトルのid",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "タイトルを返却",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/data"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "title" ],
-        "description" : "タイトルを変更",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "変更したいデータのid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        }, {
-          "name" : "title",
-          "in" : "query",
-          "description" : "タイトルデータ",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/title"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "変更"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "title" ],
-        "description" : "タイトルを削除",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "消したいタイトルのid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "削除"
-          }
-        }
-      }
-    },
-    "/description" : {
-      "get" : {
-        "tags" : [ "description" ],
-        "description" : "説明文を検索",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "説明文のid",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "説明情報を返却",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/data"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "description" ],
-        "description" : "説明文を変更",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "変更したいデータのid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "description" : "商品説明文",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/description"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "変更"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "description" ],
-        "description" : "説明文を削除",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "消したいdescriptionのid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "削除"
-          }
-        }
-      }
-    },
-    "/price" : {
-      "get" : {
-        "tags" : [ "price" ],
-        "description" : "価格を検索",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "価格のid",
-          "required" : true,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "価格情報を返却",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/data"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "price" ],
-        "description" : "価格を変更",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "変更したいデータのid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
-          }
-        }, {
-          "name" : "price",
-          "in" : "query",
-          "description" : "価格",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/price"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "変更"
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "price" ],
-        "description" : "価格を削除",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "query",
-          "description" : "削除したい価格のid",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/data/properties/id"
+            "$ref" : "#/components/schemas/id"
           }
         } ],
         "responses" : {
@@ -420,31 +245,56 @@
   },
   "components" : {
     "schemas" : {
-      "data" : {
+      "id" : {
+        "type" : "integer",
+        "example" : 0
+      },
+      "picture" : {
         "type" : "object",
         "properties" : {
-          "id" : {
-            "type" : "integer",
-            "example" : 0
-          },
           "picture" : {
             "type" : "string",
             "description" : "商品の画像データ",
             "format" : "binary"
-          },
+          }
+        }
+      },
+      "title" : {
+        "maxLength" : 100,
+        "type" : "string",
+        "example" : "商品A"
+      },
+      "description" : {
+        "maxLength" : 500,
+        "type" : "string",
+        "example" : "商品説明"
+      },
+      "price" : {
+        "type" : "integer",
+        "example" : 0
+      },
+      "passingSet" : {
+        "type" : "object",
+        "properties" : {
           "title" : {
-            "maxLength" : 100,
-            "type" : "string",
-            "example" : "商品A"
+            "$ref" : "#/components/schemas/title"
           },
           "description" : {
-            "maxLength" : 500,
-            "type" : "string",
-            "example" : "商品説明"
+            "$ref" : "#/components/schemas/description"
           },
           "price" : {
-            "type" : "integer",
-            "example" : 0
+            "$ref" : "#/components/schemas/price"
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "entry" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/passingSet"
+            }
           }
         }
       }

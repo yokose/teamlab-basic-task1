@@ -1,0 +1,303 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Simple Inventory API",
+    "description" : "This is a simple API",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/yokose/RESTfulAPI/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "http://localhost:8080/",
+    "description" : "API サーバー"
+  } ],
+  "tags" : [ {
+    "name" : "picture",
+    "description" : "画像"
+  }, {
+    "name" : "entry",
+    "description" : "登録"
+  }, {
+    "name" : "get",
+    "description" : "所得"
+  }, {
+    "name" : "edit",
+    "description" : "編集"
+  }, {
+    "name" : "delete",
+    "description" : "削除"
+  } ],
+  "paths" : {
+    "/get" : {
+      "get" : {
+        "tags" : [ "get" ],
+        "description" : "商品情報を全て取得",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "データのid",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "所得",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/passingSet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entry" : {
+      "post" : {
+        "tags" : [ "entry" ],
+        "description" : "タイトル、説明文、価格を登録",
+        "requestBody" : {
+          "description" : "タイトル、説明文、価格",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passingSet"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "登録"
+          }
+        }
+      }
+    },
+    "/edit" : {
+      "put" : {
+        "tags" : [ "edit" ],
+        "description" : "タイトル、説明文、価格を編集",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "変更したいデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "タイトル、説明文、価格",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/passingSet"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "編集"
+          }
+        }
+      }
+    },
+    "/delete" : {
+      "delete" : {
+        "tags" : [ "delete" ],
+        "description" : "データベースから商品データを削除",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "削除したいデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "削除"
+          }
+        }
+      }
+    },
+    "/picture" : {
+      "get" : {
+        "tags" : [ "picture" ],
+        "description" : "idから画像を検索",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "画像のid",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "画像情報を返却",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/picture"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "picture" ],
+        "description" : "画像を変更",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "変更するデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "画像データ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/picture"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "変更"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "picture" ],
+        "description" : "idで結びつけて画像の登録",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "登録したいデータのid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "画像データ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/picture"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "登録"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "picture" ],
+        "description" : "画像を削除",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "消したい画像のid",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/id"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "削除"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "id" : {
+        "type" : "integer",
+        "example" : 0
+      },
+      "picture" : {
+        "type" : "object",
+        "properties" : {
+          "picture" : {
+            "type" : "string",
+            "description" : "商品の画像データ",
+            "format" : "binary"
+          }
+        }
+      },
+      "title" : {
+        "maxLength" : 100,
+        "type" : "string",
+        "example" : "商品A"
+      },
+      "description" : {
+        "maxLength" : 500,
+        "type" : "string",
+        "example" : "商品説明"
+      },
+      "price" : {
+        "type" : "integer",
+        "example" : 0
+      },
+      "passingSet" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "$ref" : "#/components/schemas/title"
+          },
+          "description" : {
+            "$ref" : "#/components/schemas/description"
+          },
+          "price" : {
+            "$ref" : "#/components/schemas/price"
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "entry" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/passingSet"
+            }
+          }
+        }
+      }
+    }
+  }
+}

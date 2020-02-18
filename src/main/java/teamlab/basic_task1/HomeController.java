@@ -9,8 +9,29 @@ import java.util.List;
 @Controller
 public class HomeController {
 
+    private final DataItemRepository repository;
+
+    public HomeController(DataItemRepository repository) { this.repository = repository; }
+
+    @ModelAttribute
+    DataItem setUpTodoItem() {
+        return  new DataItem();
+    }
+
+    @ModelAttribute
+    DataItemFrom setUpTodoDataItemFrom() {
+        DataItemFrom dataItemFrom = new DataItemFrom();
+        dataItemFrom.setDataItems(this.repository.findAll());
+        dataItemFrom.setCheck("kkk");
+
+        return dataItemFrom;
+    }
+
     @RequestMapping
-    public String index() {
+    public String index(@ModelAttribute DataItemFrom dataItemForm) {
+        dataItemForm.setDataItems(this.repository.findAll());
+        dataItemForm.setCheck("kkk");
+
         return "index";
     }
 }

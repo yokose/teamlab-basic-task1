@@ -4,8 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
 public class HomeController {
 
@@ -19,18 +17,16 @@ public class HomeController {
     }
 
     @ModelAttribute
-    DataItemFrom setUpTodoDataItemFrom() {
-        DataItemFrom dataItemFrom = new DataItemFrom();
-        dataItemFrom.setDataItems(this.repository.findAll());
-        dataItemFrom.setCheck("kkk");
+    DataItemForm setUpTodoDataItemForm() {
+        DataItemForm dataItemForm = new DataItemForm();
+        dataItemForm.setDataItems(this.repository.findAll());
 
-        return dataItemFrom;
+        return dataItemForm;
     }
 
     @RequestMapping
-    public String index(@ModelAttribute DataItemFrom dataItemForm) {
-        dataItemForm.setDataItems(this.repository.findAll());
-        dataItemForm.setCheck("kkk");
+    public String index() {
+
 
         return "index";
     }

@@ -21,7 +21,7 @@ public class DataItem implements Serializable {
 
     private String picture;
 
-    private String desription;
+    private String description;
 
     private Integer price;
 
@@ -47,12 +47,12 @@ public class DataItem implements Serializable {
         this.picture = picture;
     }
 
-    public String getDesription() {
-        return desription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesription(String desription) {
-        this.desription = desription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getPrice() {

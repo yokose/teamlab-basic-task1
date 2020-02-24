@@ -3,7 +3,9 @@ package teamlab.basic_task1.domain;
 import org.springframework.stereotype.Service;
 import teamlab.basic_task1.infrastructure.DataItem;
 import teamlab.basic_task1.infrastructure.DataItemRepository;
-import teamlab.basic_task1.infrastructure.PassingSet;
+import teamlab.basic_task1.infrastructure.Product;
+
+import javax.xml.crypto.Data;
 
 @Service
 public class DataItemService {
@@ -18,18 +20,20 @@ public class DataItemService {
     /**
      * serchPassingSetByIdメソッド
      * 引数idのpassingSetを探すメソッド
-     * @param id 探したいpassingSetのid
+     * @param intId 探したいpassingSetのid(int型)
      * @return PassingSet passingSet 検索したtodoを返す
      */
-    public PassingSet searchPassingSetById(Integer intId){
+    public Product searchProductById(Integer intId){
         Long id = Long.valueOf(intId.toString());
         try{
-            DataItem dataItem = this.repository.findById(id).orElseThrow(myException::new);
-            PassingSet passingSet = new PassingSet(dataItem.getTitle(),dataItem.getDescription(),dataItem.getPrice());
-            return passingSet;
-        }catch (myException e){
+            DataItem dataItem = this.repository.findById(id).orElseThrow(noItemException::new);
+            Product product = new Product(dataItem.getTitle(),dataItem.getDescription(),dataItem.getPrice());
+            return product;
+        }catch (noItemException e){
             this.errorMessage = "itemがnullです。";
         }
         return null;
     }
+
+    public void repositorySave(DataItem item){ this.repository.save(item); }
 }

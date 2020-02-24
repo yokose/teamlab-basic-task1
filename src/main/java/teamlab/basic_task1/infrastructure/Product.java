@@ -2,7 +2,7 @@ package teamlab.basic_task1.infrastructure;
 
 import java.io.Serializable;
 
-public class PassingSet implements Serializable {
+public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
@@ -11,7 +11,7 @@ public class PassingSet implements Serializable {
 
     private int price;
 
-    public PassingSet(String title, String description, int price){
+    public Product(String title, String description, int price){
         this.title = title;
         this.description = description;
         this.price = price;

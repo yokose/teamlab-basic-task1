@@ -1,4 +1,4 @@
-package teamlab.basic_task1.infrastructure;
+package teamlab.basic_task1.domain;
 
 import java.io.Serializable;
 

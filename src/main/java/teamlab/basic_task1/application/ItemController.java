@@ -1,10 +1,12 @@
 package teamlab.basic_task1.application;
 
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamlab.basic_task1.domain.DataItemService;
-import teamlab.basic_task1.infrastructure.Product;
+import teamlab.basic_task1.infrastructure.DataItem;
+import teamlab.basic_task1.domain.Product;
 
 /**
  * @author kenshin
@@ -15,8 +17,9 @@ import teamlab.basic_task1.infrastructure.Product;
 @RestController
 public class ItemController {
 
-    private final DataItemService dataItemService;
+    private String errorMessage;
 
+    private final DataItemService dataItemService;
     public ItemController(DataItemService dataItemService) {
         this.dataItemService = dataItemService;
     }
@@ -52,8 +55,17 @@ public class ItemController {
         if(result.hasErrors()){
             return ;
         }
+        DataItem dataItem = new DataItem();
+        dataItem = dataItemService.putProduct2DataItem(product,dataItem);
+        dataItem.setId(9L); //のちに修正
+        dataItemService.dataItemCheck(dataItem);
+        if(!StringUtils.isEmpty(dataItemService.errorMessage)){
+            System.out.println(dataItemService.errorMessage);
+            dataItemService.errorMessage = null;
+            return ;
+        }
 
-
+        dataItemService.repositorySave(dataItem);
     }
 
     /**
@@ -70,12 +82,25 @@ public class ItemController {
     }
 
 
-
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    public void edit(int id,String title,String description,int price){
+    public void edit(@RequestParam("id") int id,@RequestBody @Validated Product product, BindingResult result){
+        if(result.hasErrors()){
+            return ;
+        }
+
+        DataItem dataItem = dataItemService.searchDataItemById(id);
+        dataItem = dataItemService.putProduct2DataItem(product,dataItem);
+        dataItemService.dataItemCheck(dataItem);
+        if(!StringUtils.isEmpty(dataItemService.errorMessage)){
+            System.out.println(dataItemService.errorMessage);
+            dataItemService.errorMessage = null;
+            return ;
+        }
+        dataItemService.repositorySave(dataItem);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void delete(int id){
+        dataItemService.dataItemDelete(id);
     }
 }

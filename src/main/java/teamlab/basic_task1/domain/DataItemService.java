@@ -98,6 +98,15 @@ public class DataItemService {
         this.repository.deleteById(id);
     }
 
-
+    /**
+     * pictureDELETEメソッド
+     * 指定idのpictureデータを削除
+     * @param id
+     */
+    public void pictureDelete(Integer id){
+        DataItem dataItem = searchDataItemById(id);
+        dataItem.setPicture(null);
+        repositorySave(dataItem);
+    }
 
 }

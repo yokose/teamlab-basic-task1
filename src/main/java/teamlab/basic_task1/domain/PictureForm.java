@@ -2,6 +2,7 @@ package teamlab.basic_task1.domain;
 
 import org.springframework.web.multipart.MultipartFile;
 
+//view用のpictureクラス
 public class PictureForm {
     private MultipartFile picture;
 

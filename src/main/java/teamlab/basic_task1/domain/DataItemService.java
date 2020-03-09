@@ -2,6 +2,7 @@ package teamlab.basic_task1.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import teamlab.basic_task1.infrastructure.DataItem;
 import teamlab.basic_task1.infrastructure.DataItemRepository;
 
@@ -20,11 +21,10 @@ public class DataItemService {
     /**
      * serchPassingSetByIdメソッド
      * 引数idのpassingSetを探すメソッド
-     * @param dataItemId 探したいpassingSetのid(int型)
+     * @param id 探したいpassingSetのid(int型)
      * @return Product product 検索したproductを返す
      */
-    public Product searchProductById(Integer dataItemId){
-        Long id = Long.valueOf(dataItemId.toString());
+    public Product searchProductById(int id){
         try{
             DataItem dataItem = this.repository.findById(id).orElseThrow(NoItemException::new);
             Product product = new Product(dataItem.getTitle(),dataItem.getDescription(),dataItem.getPrice());
@@ -38,11 +38,10 @@ public class DataItemService {
     /**
      * searchDataItemByIdメソッド
      * idからDataItemを探すメソッド
-     * @param dataItemId
+     * @param id
      * @return DataItem dataItem  検索したitemを返す
      */
-    public DataItem searchDataItemById(Integer dataItemId){
-        Long id = Long.valueOf(dataItemId.toString());
+    public DataItem searchDataItemById(int id){
         try{
             DataItem dataItem = this.repository.findById(id).orElseThrow(NoItemException::new);
             return dataItem;
@@ -66,13 +65,43 @@ public class DataItemService {
      * @return エラーがあればエラーメッセージをなければnull
      */
     public void dataItemCheck(DataItem dataItem){
+        if(StringUtils.isEmpty(dataItem.getTitle())) {
+            errorMessage ="タイトルがありません。";
+            return;
+        }
+        if(StringUtils.isEmpty(dataItem.getDescription())) {
+            errorMessage ="商品説明がありません。";
+            return;
+        }
+        if(StringUtils.isEmpty(dataItem.getPrice())) {
+            errorMessage ="価格がありません。";
+            return;
+        }
+
         List<DataItem> checkList = repository.findByTitle(dataItem.getTitle());
         if(!CollectionUtils.isEmpty(checkList)){
             errorMessage = ("同じタイトルがあります。");
             return ;
         }
+
+
+
         return ;
     }
+
+    /**
+     * pictureCheckクラス
+     * pictureのバリデーション
+     * @param picture
+     */
+    public void pictureCheck(String picture){
+        if(StringUtils.isEmpty(picture)) {
+            errorMessage ="画像がありません。";
+            return;
+        }
+
+    }
+
 
     /**
      * putProduct2DataItem
@@ -91,11 +120,10 @@ public class DataItemService {
     /**
      * deleteメソッド
      * 指定idのdataItemを削除
-     * @param dataItemId
+     * @param id
      */
-    public void dataItemDelete(Integer dataItemId){
-        Long id = Long.valueOf(dataItemId.toString());
-        this.repository.deleteById(id);
+    public void dataItemDelete(int id){
+        this.repository.delete(searchDataItemById(id));
     }
 
     /**

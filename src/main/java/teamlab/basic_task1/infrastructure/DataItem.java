@@ -1,8 +1,6 @@
 package teamlab.basic_task1.infrastructure;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -13,7 +11,8 @@ public class DataItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     @NotNull
     @Size(min=1, max=100)
@@ -25,11 +24,11 @@ public class DataItem implements Serializable {
 
     private Integer price;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -3,12 +3,17 @@ package teamlab.basic_task1.application;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import teamlab.basic_task1.domain.DataItemService;
+import teamlab.basic_task1.domain.Picture;
 import teamlab.basic_task1.domain.PictureForm;
 import teamlab.basic_task1.infrastructure.DataItem;
 import teamlab.basic_task1.domain.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author kenshin
@@ -34,9 +39,14 @@ public class ItemController {
      */
     @RequestMapping(value = "/picture", method = RequestMethod.GET)
     @ResponseBody
-    public String getPicture(@RequestParam int id){
+    public Picture getPicture(@RequestParam int id){
         DataItem dataItem = dataItemService.searchDataItemById(id);
-        String picture = dataItem.getPicture();
+        if(!StringUtils.isEmpty(dataItemService.errorMessage)){
+            System.out.println(dataItemService.errorMessage);
+            dataItemService.errorMessage = null;
+            return null;
+        }
+        Picture picture = new Picture(dataItem.getPicture(), null);
         return picture;
     }
 
@@ -48,15 +58,15 @@ public class ItemController {
      * @param result
      */
     @RequestMapping(value = "/picture", method = RequestMethod.POST)
-    public void postPicture(@RequestParam("id") int id, @RequestBody @Validated String picture, BindingResult result){
+    public void postPicture(@RequestParam("id") int id, @RequestBody @Validated Picture picture, BindingResult result){
         if(result.hasErrors()){
             return ;
         }
 
         DataItem dataItem = dataItemService.searchDataItemById(id);
-        dataItem.setPicture(picture);
+        dataItem.setPicture(picture.getPicture());
 
-        //要エラーチェック
+        dataItemService.pictureCheck(picture.getPicture());
         if(!StringUtils.isEmpty(dataItemService.errorMessage)){
             System.out.println(dataItemService.errorMessage);
             dataItemService.errorMessage = null;
@@ -74,14 +84,15 @@ public class ItemController {
      * @param result
      */
     @RequestMapping(value = "/picture", method = RequestMethod.PUT)
-    public void putPicture(@RequestParam("id") int id, @RequestBody @Validated String picture, BindingResult result){
+    public void putPicture(@RequestParam("id") int id, @RequestBody @Validated Picture picture, BindingResult result){
         if(result.hasErrors()){
             return ;
         }
 
         DataItem dataItem = dataItemService.searchDataItemById(id);
-        dataItem.setPicture(picture);
-        //要pictureエラーチェック
+        dataItem.setPicture(picture.getPicture());
+
+        dataItemService.pictureCheck(picture.getPicture());
         if(!StringUtils.isEmpty(dataItemService.errorMessage)){
             System.out.println(dataItemService.errorMessage);
             dataItemService.errorMessage = null;
@@ -113,7 +124,6 @@ public class ItemController {
         }
         DataItem dataItem = new DataItem();
         dataItem = dataItemService.putProduct2DataItem(product,dataItem);
-        dataItem.setId(9L); //のちに修正
         dataItemService.dataItemCheck(dataItem);
         if(!StringUtils.isEmpty(dataItemService.errorMessage)){
             System.out.println(dataItemService.errorMessage);

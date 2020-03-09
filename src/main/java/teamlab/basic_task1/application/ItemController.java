@@ -1,19 +1,27 @@
 package teamlab.basic_task1.application;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import teamlab.basic_task1.domain.DataItemService;
 import teamlab.basic_task1.domain.Picture;
 import teamlab.basic_task1.domain.PictureForm;
 import teamlab.basic_task1.infrastructure.DataItem;
 import teamlab.basic_task1.domain.Product;
 
+import javax.validation.Valid;
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author kenshin
@@ -118,8 +126,13 @@ public class ItemController {
      * @param product
      */
     @RequestMapping(value = "/entry", method = RequestMethod.POST)
-    public void entry(@RequestBody @Validated Product product, BindingResult result){
+    public void entry(@RequestBody @Valid Product product, BindingResult result, Locale locale){
         if(result.hasErrors()){
+            List<FieldError> errors = result.getFieldErrors();
+            for (FieldError error : errors) {
+                System.out.println(error);
+                //logger.info(messageSource.getMessage(error, locale));
+            }
             return ;
         }
         DataItem dataItem = new DataItem();
@@ -179,5 +192,25 @@ public class ItemController {
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void delete(int id){
         dataItemService.dataItemDelete(id);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public Book handleException(HttpMessageNotReadableException ex,
+                                WebRequest request) {
+        Throwable t = ex.getCause();
+        if (t != null && t instanceof InvalidFormatException) {
+            InvalidFormatException ife = (InvalidFormatException) t;
+            // エラーのフィールド。
+            for (JsonMappingException.Reference r : ife.getPath()) {
+                System.out.println(r.getFieldName());
+            }
+            // エラーになったフィールドの型
+            System.out.println("type= " + ife.getTargetType().getName());
+            // エラーになったフィールドの値
+            System.out.println("value=" + ife.getValue());
+        }
+
+        return new Book();
     }
 }

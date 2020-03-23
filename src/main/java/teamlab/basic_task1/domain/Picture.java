@@ -1,10 +1,12 @@
 package teamlab.basic_task1.domain;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class Picture implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @NotEmpty
     private String picture;
 
     private String box;

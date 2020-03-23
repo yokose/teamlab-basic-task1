@@ -1,8 +1,9 @@
 package teamlab.basic_task1.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import teamlab.basic_task1.infrastructure.DataItem;
 import teamlab.basic_task1.infrastructure.DataItemRepository;
 
@@ -10,10 +11,8 @@ import java.util.List;
 
 @Service
 public class DataItemService {
-
-    public String errorMessage;
+    private static final Logger logger = LoggerFactory.getLogger(DataItemService.class);
     private final DataItemRepository repository;
-
     public DataItemService(DataItemRepository repository) {
         this.repository = repository;
     }
@@ -30,9 +29,8 @@ public class DataItemService {
             Product product = new Product(dataItem.getTitle(),dataItem.getDescription(),dataItem.getPrice());
             return product;
         }catch (NoItemException e){
-            this.errorMessage = "itemがnullです。";
+            throw e;
         }
-        return null;
     }
 
     /**
@@ -46,9 +44,8 @@ public class DataItemService {
             DataItem dataItem = this.repository.findById(id).orElseThrow(NoItemException::new);
             return dataItem;
         }catch (NoItemException e){
-            this.errorMessage = "itemがnullです." ;
+            throw e;
         }
-        return null;
     }
 
     /**
@@ -65,56 +62,12 @@ public class DataItemService {
      * @return エラーがあればエラーメッセージをなければnull
      */
     public void dataItemCheck(DataItem dataItem){
-        if(StringUtils.isEmpty(dataItem.getTitle())) {
-            errorMessage ="タイトルがありません。";
-            return;
-        }
-        if(StringUtils.isEmpty(dataItem.getDescription())) {
-            errorMessage ="商品説明がありません。";
-            return;
-        }
-        if(StringUtils.isEmpty(dataItem.getPrice())) {
-            errorMessage ="価格がありません。";
-            return;
-        }
-
         List<DataItem> checkList = repository.findByTitle(dataItem.getTitle());
         if(!CollectionUtils.isEmpty(checkList)){
-            errorMessage = ("同じタイトルがあります。");
-            return ;
+            throw new SameTitleException();
         }
-
-
 
         return ;
-    }
-
-    /**
-     * pictureCheckクラス
-     * pictureのバリデーション
-     * @param picture
-     */
-    public void pictureCheck(String picture){
-        if(StringUtils.isEmpty(picture)) {
-            errorMessage ="画像がありません。";
-            return;
-        }
-
-    }
-
-
-    /**
-     * putProduct2DataItem
-     * Product型をDataItem型に挿入
-     * @param product
-     * @param dataItem
-     * @return 挿入したDataItem型
-     */
-    public DataItem putProduct2DataItem(Product product,DataItem dataItem){
-        dataItem.setTitle(product.getTitle());
-        dataItem.setDescription(product.getDescription());
-        dataItem.setPrice(product.getPrice());
-        return dataItem;
     }
 
     /**

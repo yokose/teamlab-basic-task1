@@ -45,15 +45,4 @@ public class HomeController {
     public String index() {
         return "index";
     }
-
-    @RequestMapping(value = "/picturetest", method = RequestMethod.POST)
-    public String postPicture(PictureForm pictureForm) throws Exception{
-        StringBuffer data = new StringBuffer();
-        String base64 = new String(Base64.encodeBase64(pictureForm.getPicture().getBytes()),"ASCII");
-        data.append("data:image/jpeg;base64,");
-        data.append(base64);
-        pictureForm.setPictureBase64(data.toString());
-
-        return "express";
-    }
 }
